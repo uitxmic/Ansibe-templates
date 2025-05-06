@@ -1,0 +1,7 @@
+- hosts: target_servers
+  become: yes
+  become_method: sudo
+  tasks:
+    - include_tasks: tasks/included.yml
+
+- import_playbook: httpd.yml

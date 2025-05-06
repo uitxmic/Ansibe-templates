@@ -1,0 +1,18 @@
+- hosts: target_servers
+  become: yes
+  tasks:
+    - name: Ensure /var/www/html exists
+      file:
+        path: /var/www/html
+        state: directory
+        mode: '0755'
+
+    - name: Check if index.html exists
+      shell: test -f /var/www/html/index.html
+      ignore_errors: true
+      register: file_exists
+      failed_when: file_exists.rc not in [0, 1]
+
+    - name: Put index.html if not exists
+      shell: echo "apache2 index" > /var/www/html/index.html
+      when: file_exists.rc == 1
